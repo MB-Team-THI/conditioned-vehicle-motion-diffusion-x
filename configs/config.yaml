@@ -1,0 +1,49 @@
+data: &data_defaults
+  data_name: 'highD'
+  cond_dir: '../ce256/' 
+  cond_file: 'ce256_cl1_train_example' 
+  cond_file_test: 'ce256_cl1_test_example' #'e1062_test_results' # 
+  num_classes: 256
+
+
+train:
+  <<: *data_defaults
+  schedule_sampler: "uniform"
+  lr: 0.0002
+  lambda_smooth: 0 
+  cond_dropout_rate: 0.2
+  weight_decay: 0.00
+  lr_anneal_steps: 80000
+  use_lr_scheduler: true      # turn scheduler on/off
+  warmup_steps: 3000         # number of warmup *steps*
+  min_lr: 0.000001            # cosine floor
+  warmup_start_factor: 0.01   # warmup start factor (relative to lr)
+  batch_size: 256
+  predict_v: true
+  microbatch: -1                # -1 disables microbatches
+  ema_rate: "0.9999"            # comma-separated list of EMA values
+  log_interval: 50
+  save_interval: 20000
+  resume_checkpoint: ""
+  use_fp16: false
+  fp16_scale_growth: 0.001
+
+
+
+generate:
+  <<: *data_defaults       # merge all keys from "data"
+  model_name: 'ema_0.9999_000000.pt'
+  model_folder: 'ce_256'
+  folder_path: '../ckpts/'
+  clip_denoised: true
+  predict_v: true
+  num_samples: 9
+  batch_size: 256
+  use_ddim: true
+  eta: 0.0
+  ddim_steps: 400
+  guidance_rescale: False
+  guidance_scale_min: 0.1
+  guidance_scale_max: 1.0
+  mahanalobi_dist_max: 50
+  
